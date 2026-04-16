@@ -1,0 +1,146 @@
+<mxfile host="app.diagrams.net" version="21.0.0">
+  <diagram name="Séquence — Agent IA" id="seq-agentia">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" /><mxCell id="1" parent="0" />
+
+        <!-- TITRE -->
+        <mxCell id="titre" value="Diagramme de Séquence — Agent IA" style="text;html=1;fontSize=13;fontStyle=1;align=center;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="150" y="8" width="700" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- ══ ACTEURS ══ -->
+        <mxCell id="app" value="&lt;b&gt;App Mobile&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673a6;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="44" width="120" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="lapp" value="" style="endArrow=none;dashed=1;strokeColor=#9673a6;" edge="1" parent="1" source="app">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="100" y="720" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <mxCell id="ia" value="&lt;b&gt;Agent IA&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#d6b656;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="250" y="44" width="120" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="lia" value="" style="endArrow=none;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="ia">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="310" y="720" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <mxCell id="api" value="&lt;b&gt;API Backend&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82b366;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="460" y="44" width="120" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="lapi" value="" style="endArrow=none;dashed=1;strokeColor=#82b366;" edge="1" parent="1" source="api">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="520" y="720" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <mxCell id="db" value="&lt;b&gt;Base de Données&lt;/b&gt;" style="shape=mxgraph.flowchart.database;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="44" width="120" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="ldb" value="" style="endArrow=none;dashed=1;strokeColor=#666666;" edge="1" parent="1" source="db">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="730" y="720" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- ══ 1. INITIALISATION DE SESSION ══ -->
+        <mxCell id="s1" value="1. Initialisation de la session IA (après connexion du patient)" style="text;html=1;fillColor=#FFF2CC;strokeColor=#d6b656;fontStyle=1;fontSize=10;rounded=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="30" y="100" width="800" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="Init session IA (profil médical du patient)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="100" y="128" as="sourcePoint"/><mxPoint x="310" y="128" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e2" value="Charger profil médical du patient" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="310" y="150" as="sourcePoint"/><mxPoint x="520" y="150" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e3" value="SELECT ProfilMedical, Maladies, Médicaments" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="520" y="172" as="sourcePoint"/><mxPoint x="730" y="172" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e4" value="Profil chargé" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#666;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="730" y="194" as="sourcePoint"/><mxPoint x="310" y="194" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e5" value="Agent prêt" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#d6b656;fontColor=#7a5900;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="310" y="216" as="sourcePoint"/><mxPoint x="100" y="216" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- ══ 2. ANALYSE DES SYMPTÔMES ══ -->
+        <mxCell id="s2" value="2. Analyser les Symptômes (questionnaire adaptatif)" style="text;html=1;fillColor=#FFF2CC;strokeColor=#d6b656;fontStyle=1;fontSize=10;rounded=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="30" y="236" width="800" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="Symptômes saisis par le patient" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="100" y="264" as="sourcePoint"/><mxPoint x="310" y="264" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e7" value="Interroger base médicale" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="310" y="286" as="sourcePoint"/><mxPoint x="520" y="286" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e8" value="SELECT Maladies liées aux symptômes" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="520" y="308" as="sourcePoint"/><mxPoint x="730" y="308" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e9" value="Données médicales" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#666;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="730" y="330" as="sourcePoint"/><mxPoint x="310" y="330" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e10" value="Poser question complémentaire (questionnaire adaptatif)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#d6b656;fontColor=#7a5900;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="310" y="352" as="sourcePoint"/><mxPoint x="100" y="352" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e11" value="Réponse du patient" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="100" y="374" as="sourcePoint"/><mxPoint x="310" y="374" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- ══ 3. DÉTECTION NIVEAU DE GRAVITÉ + RECOMMANDATIONS ══ -->
+        <mxCell id="s3" value="3. Détecter le Niveau de Gravité et Générer des Recommandations" style="text;html=1;fillColor=#FFF2CC;strokeColor=#d6b656;fontStyle=1;fontSize=10;rounded=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="30" y="394" width="800" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="Analyser + détecter niveau de gravité (faible / modéré / critique)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;strokeColor=#d6b656;fontColor=#7a5900;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="310" y="422" as="sourcePoint"/><mxPoint x="310" y="422" as="targetPoint"/>
+            <Array as="points"><mxPoint x="310" y="422"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- self-call Agent IA -->
+        <mxCell id="e12b" value="Analyser + détecter gravité" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;strokeColor=#d6b656;fontColor=#7a5900;exitX=1;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="ia" target="ia">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="410" y="418"/><mxPoint x="410" y="444"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e13" value="Recommandations { causes, gravité, conseils, orientation }" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#d6b656;fontColor=#7a5900;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="310" y="462" as="sourcePoint"/><mxPoint x="100" y="462" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- ══ 4. SAUVEGARDER L'HISTORIQUE ══ -->
+        <mxCell id="s4" value="4. Sauvegarder l'Historique des Analyses" style="text;html=1;fillColor=#FFF2CC;strokeColor=#d6b656;fontStyle=1;fontSize=10;rounded=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="30" y="482" width="800" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="Sauvegarder analyse (symptômes + recommandations)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="310" y="510" as="sourcePoint"/><mxPoint x="520" y="510" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e15" value="INSERT Symptome, Recommandation" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="520" y="532" as="sourcePoint"/><mxPoint x="730" y="532" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e16" value="Sauvegardé" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#666;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="730" y="554" as="sourcePoint"/><mxPoint x="310" y="554" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- ══ 5. SURVEILLER MALADIES CHRONIQUES ══ -->
+        <mxCell id="s5" value="5. Surveiller les Maladies Chroniques (tâche périodique)" style="text;html=1;fillColor=#F8CECC;strokeColor=#b85450;fontStyle=1;fontSize=10;rounded=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="30" y="574" width="800" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" value="Récupérer profil + historique" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="310" y="602" as="sourcePoint"/><mxPoint x="520" y="602" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e18" value="SELECT ProfilMedical, Symptomes, Maladies" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="520" y="624" as="sourcePoint"/><mxPoint x="730" y="624" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e19" value="Données santé" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#666;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="730" y="646" as="sourcePoint"/><mxPoint x="310" y="646" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e20" value="Déclencher alerte si situation anormale détectée" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;strokeColor=#b85450;fontColor=#b85450;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="310" y="668" as="sourcePoint"/><mxPoint x="100" y="668" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- ══ 6. FIN DE SESSION ══ -->
+        <mxCell id="s6" value="6. Fin de Session" style="text;html=1;fillColor=#DAE8FC;strokeColor=#6c8ebf;fontStyle=1;fontSize=10;rounded=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="30" y="688" width="800" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" value="Terminer session IA" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="100" y="716" as="sourcePoint"/><mxPoint x="310" y="716" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e22" value="Session IA terminée" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#666;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="310" y="738" as="sourcePoint"/><mxPoint x="100" y="738" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

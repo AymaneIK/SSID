@@ -1,0 +1,200 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.0 Safari/537.36" version="29.6.1">
+  <diagram name="Séquence — Système de Notification" id="seq-notif">
+    <mxGraphModel dx="1281" dy="674" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="titre" parent="1" style="text;html=1;fontSize=13;fontStyle=1;align=center;strokeColor=none;fillColor=none;" value="Diagramme de Séquence — Système de Notification" vertex="1">
+          <mxGeometry height="24" width="800" x="100" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="ia" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#d6b656;fontStyle=1;fontSize=11;" value="&lt;b&gt;Agent IA&lt;/b&gt;" vertex="1">
+          <mxGeometry height="38" width="120" x="30" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="lia" edge="1" parent="1" source="ia" style="endArrow=none;dashed=1;strokeColor=#d6b656;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sn" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#b85450;fontStyle=1;fontSize=11;" value="&lt;b&gt;Système de&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Notification&lt;/b&gt;" vertex="1">
+          <mxGeometry height="42" width="120" x="240" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lsn" edge="1" parent="1" source="sn" style="endArrow=none;dashed=1;strokeColor=#b85450;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="api" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82b366;fontStyle=1;fontSize=11;" value="&lt;b&gt;API Backend&lt;/b&gt;" vertex="1">
+          <mxGeometry height="38" width="120" x="450" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="lapi" edge="1" parent="1" source="api" style="endArrow=none;dashed=1;strokeColor=#82b366;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="510" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="db" parent="1" style="shape=mxgraph.flowchart.database;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=11;" value="&lt;b&gt;Base de Données&lt;/b&gt;" vertex="1">
+          <mxGeometry height="38" width="120" x="660" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="ldb" edge="1" parent="1" source="db" style="endArrow=none;dashed=1;strokeColor=#666666;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="720" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pat" parent="1" style="shape=umlActor;html=1;whiteSpace=wrap;fillColor=#FFE6CC;strokeColor=#d6b656;verticalLabelPosition=bottom;verticalAlign=top;" value="&lt;b&gt;Patient&lt;/b&gt;" vertex="1">
+          <mxGeometry height="55" width="40" x="865" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lpat" edge="1" parent="1" source="pat" style="endArrow=none;dashed=1;strokeColor=#d6b656;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="885" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s1" parent="1" style="text;html=1;fillColor=#F8CECC;strokeColor=#b85450;fontStyle=1;fontSize=10;rounded=1;align=center;" value="1. Planifier les Rappels de Médicaments" vertex="1">
+          <mxGeometry height="16" width="880" x="20" y="104" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;strokeColor=#d6b656;fontColor=#7a5900;" value="Planifier rappels (médicament, fréquence, heure)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="132" as="sourcePoint" />
+            <mxPoint x="300" y="132" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" value="Récupérer médicaments du patient">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="154" as="sourcePoint" />
+            <mxPoint x="510" y="154" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" value="SELECT Médicament (dosage, fréquence)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="510" y="176" as="sourcePoint" />
+            <mxPoint x="720" y="176" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#666;" value="Liste médicaments du patient">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="720" y="198" as="sourcePoint" />
+            <mxPoint x="300" y="198" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#b85450;fontColor=#b85450;" value="Rappels planifiés">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="220" as="sourcePoint" />
+            <mxPoint x="90" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s2" parent="1" style="text;html=1;fillColor=#F8CECC;strokeColor=#b85450;fontStyle=1;fontSize=10;rounded=1;align=center;" value="2. Envoyer Rappel de Médicament (déclenchement automatique)" vertex="1">
+          <mxGeometry height="16" width="880" x="20" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;strokeColor=#b85450;fontColor=#b85450;" value="Heure de rappel atteinte — déclencher notification">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="268" as="sourcePoint" />
+            <mxPoint x="300" y="268" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;strokeColor=#b85450;fontColor=#b85450;" value="Push : &quot;Prendre [médicament] maintenant&quot;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="290" as="sourcePoint" />
+            <mxPoint x="885" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" value="Enregistrer alerte envoyée">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="314" as="sourcePoint" />
+            <mxPoint x="510" y="314" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" value="INSERT Alerte (type=rappel_médicament)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="510" y="336" as="sourcePoint" />
+            <mxPoint x="720" y="336" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#666;" value="OK">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="720" y="358" as="sourcePoint" />
+            <mxPoint x="300" y="358" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s3" parent="1" style="text;html=1;fillColor=#F8CECC;strokeColor=#b85450;fontStyle=1;fontSize=10;rounded=1;align=center;" value="3. Envoyer Alerte Critique (situation anormale détectée par l&#39;Agent IA)" vertex="1">
+          <mxGeometry height="16" width="880" x="20" y="378" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;strokeColor=#d6b656;fontColor=#cc0000;" value="Situation critique détectée — déclencher alerte urgence">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="406" as="sourcePoint" />
+            <mxPoint x="300" y="406" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;strokeColor=#cc0000;fontColor=#cc0000;fontStyle=1;" value="Push URGENT : &quot;Consultez les urgences immédiatement&quot;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="428" as="sourcePoint" />
+            <mxPoint x="885" y="428" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" value="Enregistrer alerte critique">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="452" as="sourcePoint" />
+            <mxPoint x="510" y="452" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" value="INSERT Alerte (type=critique)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="510" y="474" as="sourcePoint" />
+            <mxPoint x="720" y="474" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#666;" value="OK">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="720" y="496" as="sourcePoint" />
+            <mxPoint x="300" y="496" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s4" parent="1" style="text;html=1;fillColor=#F8CECC;strokeColor=#b85450;fontStyle=1;fontSize=10;rounded=1;align=center;" value="4. Patient Consulte l&#39;Historique des Alertes" vertex="1">
+          <mxGeometry height="16" width="880" x="20" y="516" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" value="Consulter historique des alertes">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="885" y="544" as="sourcePoint" />
+            <mxPoint x="510" y="544" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" value="SELECT Alerte WHERE patientId=...">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="510" y="566" as="sourcePoint" />
+            <mxPoint x="720" y="566" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#666;" value="Historique alertes (rappels + critiques)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="720" y="588" as="sourcePoint" />
+            <mxPoint x="885" y="588" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s5" parent="1" style="text;html=1;fillColor=#F8CECC;strokeColor=#b85450;fontStyle=1;fontSize=10;rounded=1;align=center;" value="5. Surveiller les Maladies Chroniques (tâche périodique)" vertex="1">
+          <mxGeometry height="16" width="880" x="20" y="608" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;strokeColor=#d6b656;fontColor=#7a5900;" value="Vérifier état maladies chroniques">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="636" as="sourcePoint" />
+            <mxPoint x="300" y="636" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;" value="SELECT ProfilMedical, Maladies chroniques">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="658" as="sourcePoint" />
+            <mxPoint x="720" y="658" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;dashed=1;strokeColor=#666;" value="Données maladies">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="720" y="680" as="sourcePoint" />
+            <mxPoint x="300" y="680" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e22" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=block;endFill=1;strokeColor=#b85450;fontColor=#b85450;" value="Recommandation de suivi si nécessaire">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="702" as="sourcePoint" />
+            <mxPoint x="885" y="702" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

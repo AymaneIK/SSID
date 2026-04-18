@@ -1,10 +1,19 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Optional
+import uuid
 from ..database import get_db
 from .. import models, schemas
 
 router = APIRouter(prefix="/api/directory", tags=["directory"])
+
+@router.post("/doctors", response_model=schemas.Doctor)
+def create_doctor(doctor: schemas.DoctorCreate, db: Session = Depends(get_db)):
+    db_doc = models.Doctor(id=str(uuid.uuid4())[:8], **doctor.dict())
+    db.add(db_doc)
+    db.commit()
+    db.refresh(db_doc)
+    return db_doc
 
 @router.get("/doctors", response_model=List[schemas.Doctor])
 def get_doctors(
@@ -21,22 +30,15 @@ def get_doctors(
     if query:
         doctors = doctors.filter(models.Doctor.name.contains(query))
     
-    docs_list = doctors.all()
-    # Mock fallback if db is empty
-    if not docs_list:
-        return [
-            {
-                "id": "1", "name": "Dr. Ahmed Benali", "specialty": "Cardiologie",
-                "hospital": "CHU Hassan II", "rating": 4.8, "schedule": "Lun-Ven, 09:00-16:00",
-                "is_available": True, "city": "Fès"
-            },
-            {
-                "id": "2", "name": "Dr. Fatima Zahra", "specialty": "Pédiatrie",
-                "hospital": "Clinique des Oliviers", "rating": 4.9, "schedule": "Mar-Sam, 10:00-18:00",
-                "is_available": False, "city": "Meknès"
-            }
-        ]
-    return docs_list
+    return doctors.all()
+
+@router.post("/hospitals", response_model=schemas.Hospital)
+def create_hospital(hospital: schemas.HospitalCreate, db: Session = Depends(get_db)):
+    db_hosp = models.Hospital(id=str(uuid.uuid4())[:8], **hospital.dict())
+    db.add(db_hosp)
+    db.commit()
+    db.refresh(db_hosp)
+    return db_hosp
 
 @router.get("/hospitals", response_model=List[schemas.Hospital])
 def get_hospitals(region: Optional[str] = None, db: Session = Depends(get_db)):
@@ -44,18 +46,10 @@ def get_hospitals(region: Optional[str] = None, db: Session = Depends(get_db)):
     if region:
         hospitals = hospitals.filter(models.Hospital.address.contains(region))
         
-    hosp_list = hospitals.all()
-    if not hosp_list:
-        return [
-            {
-                "id": "1", "name": "CHU Hassan II", "type": "Public", "rating": 4.6,
-                "address": "Route de Sidi Harazem, Fès", "has_emergency": True,
-                "departments": ["Urgences", "Cardiologie", "Neurologie", "Maternité"]
-            },
-            {
-                "id": "2", "name": "Clinique Riad", "type": "Privé", "rating": 4.5,
-                "address": "Avenue Hassan II, Meknès", "has_emergency": False,
-                "departments": ["Pédiatrie", "Dermatologie", "Ophtalmologie"]
-            }
-        ]
-    return hosp_list
+    results = hospitals.all()
+    out = []
+    for h in results:
+        h_dict = h.__dict__
+        h_dict['departments_list'] = h.departments.split(",") if h.departments else []
+        out.append(schemas.Hospital(**h_dict))
+    return out

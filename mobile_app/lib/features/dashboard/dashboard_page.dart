@@ -6,9 +6,61 @@ import 'widgets/health_summary_card.dart';
 import 'widgets/weekly_chart.dart';
 import 'widgets/trend_card.dart';
 import 'widgets/alerts_history_card.dart';
+import 'widgets/echocardiogram_card.dart';
+import 'screens/task_list_page.dart';
+import 'screens/health_trends_detail_page.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  List<Map<String, dynamic>> _tasks = [
+    {
+      'title': 'Prendre Amlodipine 5mg',
+      'description': '1 comprimé le matin après le petit-déjeuner',
+      'icon': Icons.medication_rounded,
+      'color': AppColors.primary,
+      'isDone': true,
+      'time': '08:30',
+    },
+    {
+      'title': 'Marche quotidienne',
+      'description': 'Marcher au moins 15 minutes à un rythme soutenu',
+      'icon': Icons.directions_walk_rounded,
+      'color': AppColors.success,
+      'isDone': true,
+      'time': '18:00',
+    },
+    {
+      'title': 'Mesurer la tension',
+      'description': 'Prendre la tension au repos et noter les valeurs',
+      'icon': Icons.speed_rounded,
+      'color': AppColors.info,
+      'isDone': false,
+      'time': '20:00',
+    },
+    {
+      'title': 'Réduire le sel',
+      'description': 'Éviter les plats préparés et le sel de table',
+      'icon': Icons.restaurant_rounded,
+      'color': AppColors.warning,
+      'isDone': false,
+      'time': 'Toute la journée',
+    },
+  ];
+
+  double get _progress {
+    if (_tasks.isEmpty) return 0.0;
+    final doneCount = _tasks.where((t) => t['isDone'] == true).length;
+    return doneCount / _tasks.length;
+  }
+
+  int get _remainingTasks => _tasks.where((t) => t['isDone'] == false).length;
+
 
   @override
   Widget build(BuildContext context) {
@@ -61,15 +113,31 @@ class DashboardPage extends StatelessWidget {
               ),
             ),
 
+            // ECG Card (formerly Echocardiogram)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                child: const ECGCard(),
+              ),
+            ),
+
             // Trends
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: Column(
                   children: [
-                    const SectionHeader(
+                    SectionHeader(
                       title: 'Tendances de santé',
                       actionText: 'Analyse',
+                      onAction: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const HealthTrendsDetailPage()),
+                        );
+                      },
                     ),
                     const SizedBox(height: 8),
                     _buildTrendsGrid(context),
@@ -78,7 +146,7 @@ class DashboardPage extends StatelessWidget {
               ),
             ),
 
-            // Doctor Plan Progress
+            // Doctor Plan Progress (Interactive Tasks)
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -291,17 +359,6 @@ class DashboardPage extends StatelessWidget {
           SizedBox(
             width: 150,
             child: HealthSummaryCard(
-              icon: Icons.bloodtype_rounded,
-              color: AppColors.primary,
-              label: 'Cell. sanguines',
-              value: '98',
-              unit: '%',
-            ),
-          ),
-          SizedBox(width: 12),
-          SizedBox(
-            width: 150,
-            child: HealthSummaryCard(
               icon: Icons.thermostat_rounded,
               color: AppColors.warning,
               label: 'Température',
@@ -408,19 +465,6 @@ class DashboardPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceVariant,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(
-                  Icons.more_horiz,
-                  color: AppColors.textSecondary,
-                  size: 20,
-                ),
-              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -431,7 +475,7 @@ class DashboardPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Votre plan est\npresque terminé',
+                      _progress >= 1.0 ? 'Plan complété !' : 'Votre plan est\npresque terminé',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                             height: 1.3,
@@ -467,7 +511,7 @@ class DashboardPage extends StatelessWidget {
                       width: 80,
                       height: 80,
                       child: CircularProgressIndicator(
-                        value: 0.67,
+                        value: _progress,
                         strokeWidth: 7,
                         backgroundColor: AppColors.primarySurface,
                         valueColor: const AlwaysStoppedAnimation<Color>(
@@ -476,7 +520,7 @@ class DashboardPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '67%',
+                      '${(_progress * 100).toInt()}%',
                       style:
                           Theme.of(context).textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.w800,
@@ -488,11 +532,13 @@ class DashboardPage extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
+
+          // Progress Indicator
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: LinearProgressIndicator(
-              value: 0.67,
+              value: _progress,
               minHeight: 8,
               backgroundColor: AppColors.primarySurface,
               valueColor:
@@ -504,19 +550,55 @@ class DashboardPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '✏️ 3 tâches restantes',
+                '✏️ $_remainingTasks tâches restantes',
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: AppColors.textTertiary,
                     ),
               ),
               Text(
-                '67% complété',
+                '${(_progress * 100).toInt()}% complété',
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
                     ),
               ),
             ],
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TaskListPage(initialTasks: _tasks),
+                  ),
+                );
+
+                if (result != null && result is List<Map<String, dynamic>>) {
+                  setState(() {
+                    _tasks = result;
+                  });
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                elevation: 0,
+              ),
+              child: const Text(
+                'Voir toutes les tâches',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                ),
+              ),
+            ),
           ),
         ],
       ),

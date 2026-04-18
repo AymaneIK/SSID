@@ -146,7 +146,7 @@ class MedicalProfilePage extends StatelessWidget {
 
   Widget _buildPatientDetailsRow(BuildContext context, Patient patient) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
@@ -162,21 +162,13 @@ class MedicalProfilePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildDetailItem(context, Icons.calendar_today_rounded,
-              'Date de naissance', patient.dateOfBirth),
-          Container(
-            width: 1,
-            height: 40,
-            color: AppColors.divider,
-          ),
+              'Âge', '29 ans'),
           _buildDetailItem(context, Icons.bloodtype_rounded,
-              'Groupe sanguin', patient.bloodType),
-          Container(
-            width: 1,
-            height: 40,
-            color: AppColors.divider,
-          ),
+              'Gr. sanguin', patient.bloodType),
           _buildDetailItem(context, Icons.monitor_weight_rounded,
               'Poids', '${patient.weight} kg'),
+          _buildDetailItem(context, Icons.height_rounded,
+              'Taille', '${patient.height.toInt()} cm'),
         ],
       ),
     );

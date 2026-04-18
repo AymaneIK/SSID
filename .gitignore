@@ -1,0 +1,33 @@
+# Project Specific
+/local_backup/
+
+# Flutter/Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+*.lock
+.DS_Store
+
+# Android
+local.properties
+*.keystore
+*.jks
+*.jks.gpg
+
+# iOS/macOS
+Pods/
+*.xcworkspace
+*.xcuserdatad
+*.pbview
+
+# Web
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

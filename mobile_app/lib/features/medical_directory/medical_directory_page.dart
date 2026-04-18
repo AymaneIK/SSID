@@ -6,6 +6,7 @@ import 'widgets/search_bar_widget.dart';
 import 'widgets/specialty_chips.dart';
 import 'widgets/doctor_card.dart';
 import 'widgets/hospital_card.dart';
+import 'screens/map_detail_page.dart';
 
 class MedicalDirectoryPage extends StatefulWidget {
   const MedicalDirectoryPage({super.key});
@@ -18,6 +19,7 @@ class _MedicalDirectoryPageState extends State<MedicalDirectoryPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   String? _selectedSpecialty;
+  String? _selectedRegion = 'Fès-Meknès'; // Default
   String _searchQuery = '';
 
   final specialties = [
@@ -58,11 +60,10 @@ class _MedicalDirectoryPageState extends State<MedicalDirectoryPage>
                   .contains(_searchQuery.toLowerCase()))
           .toList();
     }
-    if (_selectedSpecialty != null && _selectedSpecialty != 'Tous') {
+    if (_selectedRegion != null) {
       doctors = doctors
-          .where((d) => d.specialty
-              .toLowerCase()
-              .contains(_selectedSpecialty!.toLowerCase()))
+          .where((d) =>
+              d.region.toLowerCase() == _selectedRegion!.toLowerCase())
           .toList();
     }
     return doctors;
@@ -81,7 +82,65 @@ class _MedicalDirectoryPageState extends State<MedicalDirectoryPage>
                   d.toLowerCase().contains(_searchQuery.toLowerCase())))
           .toList();
     }
+    if (_selectedRegion != null) {
+      hospitals = hospitals
+          .where((h) => h.region.toLowerCase() == _selectedRegion!.toLowerCase())
+          .toList();
+    }
     return hospitals;
+  }
+
+  void _showRegionPicker() {
+    final regions = [
+      'Tanger-Tétouan-Al Hoceïma',
+      'L\'Oriental',
+      'Fès-Meknès',
+      'Rabat-Salé-Kénitra',
+      'Béni Mellal-Khénifra',
+      'Casablanca-Settat',
+      'Marrakech-Safi',
+      'Drâa-Tafilalet',
+      'Souss-Massa',
+      'Guelmim-Oued Noun',
+      'Laâyoune-Sakia El Hamra',
+      'Dakhla-Oued Ed Dahab',
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          children: [
+            const SizedBox(height: 12),
+            Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(2))),
+            const SizedBox(height: 20),
+            Text('Choisir une région', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 16),
+            Expanded(
+              child: ListView.builder(
+                itemCount: regions.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(regions[index]),
+                    onTap: () {
+                      setState(() {
+                        _selectedRegion = regions[index];
+                      }); 
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -91,56 +150,51 @@ class _MedicalDirectoryPageState extends State<MedicalDirectoryPage>
       body: SafeArea(
         child: Column(
           children: [
-            // Header
-            Padding(
+                       Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
               child: Row(
                 children: [
-                  Container(
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.shadow.withValues(alpha: 0.08),
-                          blurRadius: 12,
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      color: AppColors.textPrimary,
-                      size: 18,
-                    ),
-                  ),
+                  const SizedBox(width: 42), // Spacer to center title
                   const Spacer(),
                   Text(
                     'Répertoire médical',
                     style:
                         Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
+                               fontWeight: FontWeight.w700,
+                             ),
                   ),
                   const Spacer(),
-                  Container(
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.shadow.withValues(alpha: 0.08),
-                          blurRadius: 12,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MapDetailPage(
+                            locationName: 'Tous les établissements',
+                            address: 'Diverses localisations au Maroc',
+                          ),
                         ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.map_rounded,
-                      color: AppColors.textSecondary,
-                      size: 20,
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.shadow.withValues(alpha: 0.08),
+                            blurRadius: 12,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.map_rounded,
+                        color: AppColors.textSecondary,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ],
@@ -164,38 +218,42 @@ class _MedicalDirectoryPageState extends State<MedicalDirectoryPage>
             // Region selector
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: AppColors.primarySurface,
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on_rounded,
-                      color: AppColors.primary,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Fès-Meknès',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(
-                            color: AppColors.primaryDark,
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                    const Spacer(),
-                    const Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: AppColors.primary,
-                      size: 22,
-                    ),
-                  ],
+              child: InkWell(
+                onTap: _showRegionPicker,
+                borderRadius: BorderRadius.circular(14),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.primarySurface,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on_rounded,
+                        color: AppColors.primary,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        _selectedRegion ?? 'Choisir une région',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(
+                              color: AppColors.primaryDark,
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                      const Spacer(),
+                      const Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: AppColors.primary,
+                        size: 22,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

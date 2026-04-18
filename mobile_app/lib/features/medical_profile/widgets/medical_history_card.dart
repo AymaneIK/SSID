@@ -144,6 +144,11 @@ class _MedicalHistoryCardState extends State<MedicalHistoryCard> {
                       );
                     }).toList(),
                   ),
+                  const SizedBox(height: 18),
+                  _buildSubHeader(context, 'Médicaments ultérieurs',
+                      Icons.history_toggle_off_rounded, AppColors.primary),
+                  const SizedBox(height: 8),
+                  _buildPreviousMedsList(context),
                 ],
               ),
             ),
@@ -226,6 +231,66 @@ class _MedicalHistoryCardState extends State<MedicalHistoryCard> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPreviousMedsList(BuildContext context) {
+    final previousMeds = [
+      {'name': 'Paracétamol', 'period': 'Jan 2024 - Fév 2024', 'reason': 'Fièvre passagère'},
+      {'name': 'Amoxicilline', 'period': 'Déc 2023', 'reason': 'Infection dentaire'},
+    ];
+
+    return Column(
+      children: previousMeds.map((med) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceVariant,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        med['name']!,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        med['reason']!,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.textTertiary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    med['period']!,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: AppColors.textSecondary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }

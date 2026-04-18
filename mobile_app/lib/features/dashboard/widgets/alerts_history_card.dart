@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../screens/alerts_history_list_page.dart';
 
 class AlertsHistoryCard extends StatelessWidget {
   const AlertsHistoryCard({super.key});
@@ -81,7 +82,13 @@ class AlertsHistoryCard extends StatelessWidget {
               ),
               const Spacer(),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AlertsHistoryListPage()),
+                  );
+                },
                 child: const Text(
                   'Tout voir',
                   style: TextStyle(

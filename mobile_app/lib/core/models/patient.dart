@@ -26,12 +26,12 @@ class Patient {
   static Patient mock() => const Patient(
         id: '1',
         cin: 'AB123456',
-        firstName: 'Yassine',
-        lastName: 'El Amrani',
-        dateOfBirth: '15/03/1995',
+        firstName: 'Aymane',
+        lastName: 'Ikendiden',
+        dateOfBirth: '14/10/2004',
         bloodType: 'A+',
-        weight: 72.5,
-        height: 175,
+        weight: 61.2,
+        height: 178,
         avatarUrl: null,
       );
 }

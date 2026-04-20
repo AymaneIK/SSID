@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/theme/app_theme.dart';
 import '../core/widgets/bottom_nav_bar.dart';
 import '../features/dashboard/dashboard_page.dart';
 import '../features/medical_profile/medical_profile_page.dart';

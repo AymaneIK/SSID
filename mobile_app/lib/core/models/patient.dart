@@ -30,23 +30,23 @@ class Patient {
   String get fullName => '$firstName $lastName';
 
   static Patient mock() => const Patient(
-    id: '1',
-    cin: 'AB123456',
-    firstName: 'Aymane',
-    lastName: 'Ikendiden',
-    dateOfBirth: '14/10/2004',
-    bloodType: 'A+',
-    weight: 61.2,
-    height: 178,
-    avatarUrl: null,
-    conditions: [
-      Disease(name: 'Asthme', type: 'chronic', diagnosedDate: '2018', notes: 'Léger, contrôlé par traitement'),
-      Disease(name: 'Allergie au pollen', type: 'allergy', diagnosedDate: '2015'),
-      Disease(name: 'Fracture du bras', type: 'past', diagnosedDate: '2020',  notes: 'Complètement guéri'),
-    ],
-    medications: [
-      Medication(name: 'Metformine', dosage: '500mg', frequency: '2 fois/jour'),
-      Medication(name: 'Ramipril', dosage: '5mg', frequency: '1 fois/jour'),
-    ],
+      id: '1',
+      cin: 'AB123456',
+      firstName: 'Aymane',
+      lastName: 'Ikendiden',
+      dateOfBirth: '14/10/2004',
+      bloodType: 'A+',
+      weight: 61.2,
+      height: 178,
+      avatarUrl: null,
+      conditions: [
+        Disease(name: 'Asthme', type: 'chronic', diagnosedDate: '2018', notes: 'Léger, contrôlé par traitement'),
+        Disease(name: 'Allergie au pollen', type: 'allergy', diagnosedDate: '2015'),
+        Disease(name: 'Fracture du bras', type: 'past', diagnosedDate: '2020',  notes: 'Complètement guéri'),
+      ],
+      medications: [
+        Medication(name: 'Metformine', dosage: '500mg', frequency: '2 fois/jour'),
+        Medication(name: 'Ramipril', dosage: '5mg', frequency: '1 fois/jour'),
+      ],
   );
 }

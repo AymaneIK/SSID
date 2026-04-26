@@ -1,0 +1,952 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MedicalApp());
+}
+
+class MedicalApp extends StatelessWidget {
+  const MedicalApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'MedCare',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4CAF50)),
+        fontFamily: 'Roboto',
+        useMaterial3: true,
+      ),
+      home: const MainNavigation(),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// NAVIGATION PRINCIPALE
+// ─────────────────────────────────────────────
+class MainNavigation extends StatefulWidget {
+  const MainNavigation({super.key});
+
+  @override
+  State<MainNavigation> createState() => _MainNavigationState();
+}
+
+class _MainNavigationState extends State<MainNavigation> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const SleepScreen(),
+    const BodyScanScreen(),
+    const PatientCardScreen(),
+    const CategoryScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_currentIndex],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, -4))],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (i) => setState(() => _currentIndex = i),
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          selectedItemColor: const Color(0xFF4CAF50),
+          unselectedItemColor: Colors.grey.shade400,
+          selectedLabelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+          unselectedLabelStyle: const TextStyle(fontSize: 11),
+          elevation: 0,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.bedtime_rounded), label: 'Sleep'),
+            BottomNavigationBarItem(icon: Icon(Icons.accessibility_new_rounded), label: 'Body'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_rounded), label: 'Patient'),
+            BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'Categories'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// SCREEN 1 : HOME
+// ─────────────────────────────────────────────
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF0F7F0),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 22,
+                    backgroundColor: const Color(0xFF4CAF50),
+                    child: const Icon(Icons.person, color: Colors.white, size: 26),
+                  ),
+                  const SizedBox(width: 12),
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    const Text('Drake White', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E))),
+                    Text('#4432124', style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
+                  ]),
+                  const Spacer(),
+                  _iconCircle(Icons.mic_rounded),
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              // Tabs
+              Row(children: [
+                _tab('Planned', active: true),
+                const SizedBox(width: 8),
+                _tab('Being treated'),
+                const SizedBox(width: 8),
+                _tab('Hospitalized'),
+              ]),
+              const SizedBox(height: 20),
+
+              // Appointment card
+              _card(child: Column(children: [
+                Row(children: [
+                  _infoCol('Date & Time', '4:00 PM\n18 June'),
+                  _infoCol('Doctor', 'Doctor\nRichard', hasAvatar: true),
+                  _infoCol('Medical card', 'No card'),
+                ]),
+                const SizedBox(height: 14),
+                SizedBox(
+                  height: 42,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 10,
+                    itemBuilder: (_, i) {
+                      final isSelected = i == 4;
+                      return Container(
+                        width: 34,
+                        margin: const EdgeInsets.only(right: 6),
+                        decoration: BoxDecoration(
+                          color: isSelected ? const Color(0xFF4CAF50) : Colors.transparent,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text('${i + 1}',
+                              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: isSelected ? Colors.white : Colors.grey.shade600)),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                  _actionIcon(Icons.description_outlined, 'Files'),
+                  _actionIcon(Icons.grid_4x4_rounded, 'Scan'),
+                  _actionIcon(Icons.person_outline_rounded, 'Profile'),
+                  _actionIcon(Icons.mic_rounded, 'Voice'),
+                ]),
+              ])),
+              const SizedBox(height: 20),
+
+              // Stats
+              Row(children: [
+                Expanded(child: _statCard('141.2', 'lb', Icons.monitor_weight_outlined)),
+                const SizedBox(width: 12),
+                Expanded(child: _statCard("79''", 'bpm', Icons.favorite_outline_rounded, highlight: true)),
+              ]),
+              const SizedBox(height: 12),
+
+              // Patient bar
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(color: const Color(0xFF1A1A2E), borderRadius: BorderRadius.circular(20)),
+                child: Row(children: [
+                  CircleAvatar(radius: 22, backgroundColor: Colors.grey.shade700, child: const Icon(Icons.person, color: Colors.white)),
+                  const SizedBox(width: 12),
+                  const Text('Kelly Johnson', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15)),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(color: const Color(0xFF4CAF50), borderRadius: BorderRadius.circular(12)),
+                    child: const Text('Patient', style: TextStyle(color: Colors.white, fontSize: 12)),
+                  ),
+                ]),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _tab(String label, {bool active = false}) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+    decoration: BoxDecoration(
+      color: active ? const Color(0xFF4CAF50) : Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 8)],
+    ),
+    child: Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: active ? Colors.white : Colors.grey.shade600)),
+  );
+
+  Widget _iconCircle(IconData icon) => Container(
+    width: 40, height: 40,
+    decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 8)]),
+    child: Icon(icon, color: const Color(0xFF4CAF50), size: 20),
+  );
+
+  Widget _card({required Widget child}) => Container(
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 16)]),
+    child: child,
+  );
+
+  Widget _infoCol(String label, String value, {bool hasAvatar = false}) => Expanded(
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(label, style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+      const SizedBox(height: 2),
+      if (hasAvatar)
+        Row(children: [
+          CircleAvatar(radius: 12, backgroundColor: const Color(0xFF4CAF50).withOpacity(0.2), child: const Icon(Icons.person, size: 12, color: Color(0xFF4CAF50))),
+          const SizedBox(width: 4),
+          Text(value, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
+        ])
+      else
+        Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+    ]),
+  );
+
+  Widget _actionIcon(IconData icon, String label) => Column(children: [
+    Container(
+      width: 44, height: 44,
+      decoration: BoxDecoration(color: const Color(0xFFF0F7F0), borderRadius: BorderRadius.circular(12)),
+      child: Icon(icon, color: const Color(0xFF4CAF50), size: 22),
+    ),
+    const SizedBox(height: 4),
+    Text(label, style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
+  ]);
+
+  Widget _statCard(String value, String unit, IconData icon, {bool highlight = false}) => Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: highlight ? const Color(0xFF4CAF50) : Colors.white,
+      borderRadius: BorderRadius.circular(18),
+      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)],
+    ),
+    child: Row(children: [
+      Icon(icon, color: highlight ? Colors.white : const Color(0xFF4CAF50), size: 22),
+      const SizedBox(width: 10),
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: highlight ? Colors.white : const Color(0xFF1A1A2E))),
+        Text(unit, style: TextStyle(fontSize: 11, color: highlight ? Colors.white70 : Colors.grey.shade500)),
+      ]),
+    ]),
+  );
+}
+
+// ─────────────────────────────────────────────
+// SCREEN 2 : SLEEP
+// ─────────────────────────────────────────────
+class SleepScreen extends StatelessWidget {
+  const SleepScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final data = [5.5, 5.5, 6.3, 5.3, 9.3, 5.5, 5.5];
+    final days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF0F7F0),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            // Header
+            Row(children: [
+              _backButton(),
+              const SizedBox(width: 16),
+              const Text('Patient Sleep', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+            ]),
+            const SizedBox(height: 24),
+
+            // Sleep card
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 16)]),
+              child: Column(children: [
+                Row(children: [
+                  Container(
+                    width: 36, height: 36,
+                    decoration: BoxDecoration(color: const Color(0xFF4CAF50), borderRadius: BorderRadius.circular(10)),
+                    child: const Icon(Icons.bedtime_rounded, color: Colors.white, size: 20),
+                  ),
+                  const SizedBox(width: 10),
+                  const Text('Sleep periodic', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(10)),
+                    child: Row(children: [
+                      const Text('Monthly', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                      Icon(Icons.keyboard_arrow_down_rounded, size: 16, color: Colors.grey.shade600),
+                    ]),
+                  ),
+                ]),
+                const SizedBox(height: 20),
+                Row(children: [
+                  _sleepStat('Avg sleep', '7.3'),
+                  const SizedBox(width: 40),
+                  _sleepStat('Deep sleep', '3.6'),
+                ]),
+                const SizedBox(height: 24),
+                SizedBox(
+                  height: 120,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: List.generate(days.length, (i) {
+                      final h = data[i];
+                      final barH = (h / 9.5) * 100;
+                      final isMax = h == data.reduce((a, b) => a > b ? a : b);
+                      return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+                        if (isMax) Text('${h}h', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Color(0xFF4CAF50))),
+                        const SizedBox(height: 4),
+                        Container(
+                          width: 28, height: barH,
+                          decoration: BoxDecoration(
+                            color: isMax ? const Color(0xFF4CAF50) : const Color(0xFFB8DDB8),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(days[i], style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+                      ]);
+                    }),
+                  ),
+                ),
+              ]),
+            ),
+            const SizedBox(height: 20),
+
+            // Metrics
+            Row(children: [
+              const Text('Other datas', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E))),
+              const Spacer(),
+              Icon(Icons.more_horiz_rounded, color: Colors.grey.shade500),
+            ]),
+            const SizedBox(height: 14),
+            _metricCard('Heart rate', '76bpm', Icons.favorite_rounded, hasChart: true),
+            const SizedBox(height: 12),
+            _metricCard('Blood cells', '98%', Icons.bubble_chart_rounded, hasDots: true),
+            const SizedBox(height: 12),
+            _metricCard('Oxygen level', '', Icons.air_rounded),
+            const SizedBox(height: 20),
+
+            // Doctor plan card
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Row(children: [
+                  CircleAvatar(radius: 22, backgroundColor: const Color(0xFF4CAF50).withOpacity(0.15), child: const Icon(Icons.person, color: Color(0xFF4CAF50))),
+                  const SizedBox(width: 12),
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    const Text('Doctor Richard', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                    Text('Psychiatrist', style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
+                  ]),
+                  const Spacer(),
+                  Icon(Icons.more_horiz_rounded, color: Colors.grey.shade400),
+                ]),
+                const SizedBox(height: 16),
+                Row(children: [
+                  const Expanded(child: Text('Your plan is\nalmost done', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E)))),
+                  const Text('67%', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: Color(0xFF4CAF50))),
+                ]),
+                const SizedBox(height: 12),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: LinearProgressIndicator(value: 0.67, backgroundColor: Colors.grey.shade200, color: const Color(0xFF4CAF50), minHeight: 8),
+                ),
+                const SizedBox(height: 8),
+                Row(children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(color: const Color(0xFF4CAF50).withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+                    child: const Text('1-3 days', style: TextStyle(fontSize: 11, color: Color(0xFF4CAF50), fontWeight: FontWeight.w600)),
+                  ),
+                  const Spacer(),
+                  Text('1 left', style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
+                ]),
+              ]),
+            ),
+            const SizedBox(height: 20),
+
+            // Schedule
+            Row(children: [
+              const Text('Your schedule', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E))),
+              const Spacer(),
+              Icon(Icons.calendar_today_rounded, color: Colors.grey.shade500, size: 18),
+            ]),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 50,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((d) {
+                  final active = d == 'WED';
+                  return Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: active ? const Color(0xFF4CAF50) : Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)],
+                    ),
+                    child: Center(
+                      child: Text(d, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: active ? Colors.white : Colors.grey.shade600)),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget _sleepStat(String label, String value) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    Text(label, style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
+    Text(value, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+  ]);
+
+  Widget _metricCard(String title, String value, IconData icon, {bool hasChart = false, bool hasDots = false}) =>
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)]),
+        child: Row(children: [
+          Container(
+            width: 36, height: 36,
+            decoration: BoxDecoration(color: const Color(0xFF4CAF50).withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+            child: Icon(icon, color: const Color(0xFF4CAF50), size: 20),
+          ),
+          const SizedBox(width: 12),
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(title, style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
+            if (value.isNotEmpty) Text(value, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+          ]),
+          const Spacer(),
+          if (hasChart)
+            SizedBox(width: 60, height: 30, child: CustomPaint(painter: _HeartLinePainter())),
+          if (hasDots)
+            Row(children: List.generate(6, (i) => Container(
+              margin: const EdgeInsets.only(right: 2), width: 8, height: 8,
+              decoration: BoxDecoration(color: i < 5 ? const Color(0xFF4CAF50) : Colors.grey.shade300, shape: BoxShape.circle),
+            ))),
+          const SizedBox(width: 8),
+          Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.grey.shade400),
+        ]),
+      );
+}
+
+class _HeartLinePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p = Paint()..color = const Color(0xFF4CAF50)..strokeWidth = 2..style = PaintingStyle.stroke..strokeCap = StrokeCap.round;
+    final path = Path()
+      ..moveTo(0, size.height * .5)
+      ..lineTo(size.width * .2, size.height * .5)
+      ..lineTo(size.width * .3, size.height * .1)
+      ..lineTo(size.width * .4, size.height * .9)
+      ..lineTo(size.width * .5, size.height * .3)
+      ..lineTo(size.width * .6, size.height * .5)
+      ..lineTo(size.width, size.height * .5);
+    canvas.drawPath(path, p);
+  }
+  @override bool shouldRepaint(covariant CustomPainter _) => false;
+}
+
+// ─────────────────────────────────────────────
+// SCREEN 3 : BODY SCAN
+// ─────────────────────────────────────────────
+class BodyScanScreen extends StatelessWidget {
+  const BodyScanScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF0F7F0),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(children: [
+            // Header
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              _iconCircle(Icons.close_rounded, dark: true),
+              const Text('Body Scan', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+              _iconCircle(Icons.add_rounded, green: true),
+            ]),
+            const SizedBox(height: 30),
+
+            // Body illustration
+            Container(
+              height: 380, width: double.infinity,
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(30), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 20)]),
+              child: Stack(alignment: Alignment.center, children: [
+                CustomPaint(size: const Size(160, 320), painter: _SkeletonPainter()),
+                Positioned(left: 20, top: 80, child: _badge('Oxygen', '99%', Icons.air_rounded, const Color(0xFF4CAF50))),
+                Positioned(left: 20, top: 160, child: _badge('Heart rate', '76 bpm', Icons.favorite_rounded, Colors.redAccent)),
+                Positioned(right: 30, top: 100, child: _deg360()),
+                Positioned(right: 30, bottom: 120, child: _deg360()),
+              ]),
+            ),
+            const SizedBox(height: 20),
+
+            // Doc cards
+            Row(children: [
+              Expanded(child: _docCard('Doc 1', '23/06/24')),
+              const SizedBox(width: 12),
+              Expanded(child: _docCard('Doc 2', '23/06/24')),
+            ]),
+            const SizedBox(height: 20),
+
+            // Patient dark card
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(color: const Color(0xFF1A1A2E), borderRadius: BorderRadius.circular(20)),
+              child: Row(children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('Weight', style: TextStyle(fontSize: 11, color: Colors.grey.shade400)),
+                  const Text('141.2', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: Colors.white)),
+                  Text('lb', style: TextStyle(fontSize: 12, color: Colors.grey.shade400)),
+                ]),
+                const SizedBox(width: 20),
+                SizedBox(
+                  height: 50,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [0.4, 0.6, 0.8, 1.0, 0.7, 0.5, 0.9].map((h) => Container(
+                      width: 8, height: h * 50,
+                      margin: const EdgeInsets.only(right: 3),
+                      decoration: BoxDecoration(color: h == 1.0 ? const Color(0xFF4CAF50) : Colors.grey.shade600, borderRadius: BorderRadius.circular(4)),
+                    )).toList(),
+                  ),
+                ),
+                const Spacer(),
+                Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                  CircleAvatar(radius: 22, backgroundColor: Colors.grey.shade700, child: const Icon(Icons.person, color: Colors.white)),
+                  const SizedBox(height: 6),
+                  const Text("79''", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Colors.white)),
+                  Text('bpm', style: TextStyle(fontSize: 11, color: Colors.grey.shade400)),
+                ]),
+              ]),
+            ),
+            const SizedBox(height: 12),
+            const Text('Kelly Johnson', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E))),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget _iconCircle(IconData icon, {bool dark = false, bool green = false}) => Container(
+    width: 40, height: 40,
+    decoration: BoxDecoration(
+      color: green ? const Color(0xFF4CAF50) : Colors.white,
+      shape: BoxShape.circle,
+      boxShadow: [BoxShadow(color: green ? const Color(0xFF4CAF50).withOpacity(0.4) : Colors.black.withOpacity(0.08), blurRadius: 12)],
+    ),
+    child: Icon(icon, size: green ? 22 : 18, color: green ? Colors.white : const Color(0xFF1A1A2E)),
+  );
+
+  Widget _badge(String label, String value, IconData icon, Color color) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)]),
+    child: Row(mainAxisSize: MainAxisSize.min, children: [
+      Icon(icon, color: color, size: 16),
+      const SizedBox(width: 6),
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(label, style: TextStyle(fontSize: 10, color: Colors.grey.shade500)),
+        Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+      ]),
+    ]),
+  );
+
+  Widget _deg360() => Container(
+    width: 44, height: 44,
+    decoration: BoxDecoration(color: const Color(0xFF4CAF50).withOpacity(0.1), shape: BoxShape.circle, border: Border.all(color: const Color(0xFF4CAF50), width: 1.5)),
+    child: const Center(child: Text('360°', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Color(0xFF4CAF50)))),
+  );
+
+  Widget _docCard(String title, String date) => Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 10)]),
+    child: Row(children: [
+      Container(
+        width: 36, height: 36,
+        decoration: BoxDecoration(color: const Color(0xFF4CAF50).withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+        child: const Icon(Icons.description_rounded, color: Color(0xFF4CAF50), size: 20),
+      ),
+      const SizedBox(width: 10),
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(title, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+        Text(date, style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+      ]),
+    ]),
+  );
+}
+
+class _SkeletonPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p = Paint()..color = const Color(0xFFCCE5CC)..strokeWidth = 2.5..style = PaintingStyle.stroke..strokeCap = StrokeCap.round;
+    final cx = size.width / 2;
+    canvas.drawCircle(Offset(cx, 30), 24, p);
+    canvas.drawLine(Offset(cx, 54), Offset(cx, 180), p);
+    canvas.drawLine(Offset(cx - 60, 80), Offset(cx + 60, 80), p);
+    canvas.drawLine(Offset(cx - 60, 80), Offset(cx - 80, 140), p);
+    canvas.drawLine(Offset(cx - 80, 140), Offset(cx - 70, 200), p);
+    canvas.drawLine(Offset(cx + 60, 80), Offset(cx + 80, 140), p);
+    canvas.drawLine(Offset(cx + 80, 140), Offset(cx + 70, 200), p);
+    canvas.drawLine(Offset(cx - 40, 180), Offset(cx + 40, 180), p);
+    canvas.drawLine(Offset(cx - 30, 180), Offset(cx - 40, 250), p);
+    canvas.drawLine(Offset(cx - 40, 250), Offset(cx - 35, 310), p);
+    canvas.drawLine(Offset(cx + 30, 180), Offset(cx + 40, 250), p);
+    canvas.drawLine(Offset(cx + 40, 250), Offset(cx + 35, 310), p);
+    final ribP = Paint()..color = const Color(0xFFCCE5CC).withOpacity(0.7)..strokeWidth = 1.5..style = PaintingStyle.stroke;
+    for (int i = 0; i < 4; i++) {
+      canvas.drawArc(Rect.fromCenter(center: Offset(cx, 100.0 + i * 16), width: 80, height: 20), 0, 3.14, false, ribP);
+    }
+    canvas.drawCircle(Offset(cx - 10, 115), 10, Paint()..color = Colors.red.shade200..style = PaintingStyle.fill);
+  }
+  @override bool shouldRepaint(covariant CustomPainter _) => false;
+}
+
+// ─────────────────────────────────────────────
+// SCREEN 4 : PATIENT CARD
+// ─────────────────────────────────────────────
+class PatientCardScreen extends StatelessWidget {
+  const PatientCardScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF0F7F0),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(children: [
+              _backButton(),
+              const SizedBox(width: 16),
+              const Text('Patient card', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+            ]),
+            const SizedBox(height: 20),
+
+            // Personal info card
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 16)]),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Row(children: [
+                  const Text('Personal information', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                  const Spacer(),
+                  Icon(Icons.more_horiz_rounded, color: Colors.grey.shade400),
+                ]),
+                const SizedBox(height: 16),
+                Row(children: [
+                  CircleAvatar(radius: 28, backgroundColor: const Color(0xFF4CAF50).withOpacity(0.15), child: const Icon(Icons.person, size: 32, color: Color(0xFF4CAF50))),
+                  const SizedBox(width: 14),
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    const Text('Kelly Johnson', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+                    Row(children: [
+                      Icon(Icons.local_hospital_rounded, size: 14, color: Colors.grey.shade500),
+                      const SizedBox(width: 4),
+                      Text('Patient', style: TextStyle(fontSize: 13, color: Colors.grey.shade500)),
+                    ]),
+                  ]),
+                ]),
+                const SizedBox(height: 20),
+                Row(children: [
+                  Expanded(child: _healthTile('Cholesterol level', '+200 mg/dL', 'Total cholesterol')),
+                  const SizedBox(width: 12),
+                  Expanded(child: _lungTile()),
+                ]),
+              ]),
+            ),
+            const SizedBox(height: 20),
+
+            const Text('Patient folders', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E))),
+            const SizedBox(height: 14),
+            _folder('Current Medications', Icons.medication_rounded, expanded: true),
+            const SizedBox(height: 12),
+            _folder('Lab Results', Icons.biotech_rounded),
+            const SizedBox(height: 12),
+            _folder('Imaging Reports', Icons.image_search_rounded),
+            const SizedBox(height: 20),
+
+            const Text('Vital Signs', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E))),
+            const SizedBox(height: 14),
+            GridView.count(
+              crossAxisCount: 2, shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 1.6,
+              children: [
+                _vital('Blood Pressure', '120/80', 'mmHg', Icons.favorite_rounded, Colors.red.shade400),
+                _vital('Heart Rate', '76', 'bpm', Icons.monitor_heart_rounded, const Color(0xFF4CAF50)),
+                _vital('Temperature', '36.6', '°C', Icons.thermostat_rounded, Colors.orange),
+                _vital('Oxygen', '99', '%', Icons.air_rounded, Colors.blue.shade400),
+              ],
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget _healthTile(String title, String value, String sub) => Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(color: const Color(0xFFF8FFF8), borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE0F0E0))),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(title, style: TextStyle(fontSize: 11, color: Colors.grey.shade600, fontWeight: FontWeight.w600)),
+      const SizedBox(height: 8),
+      Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF4CAF50))),
+      const SizedBox(height: 8),
+      SizedBox(height: 40, child: CustomPaint(painter: _MiniChartPainter())),
+      const SizedBox(height: 4),
+      Text(sub, style: TextStyle(fontSize: 10, color: Colors.grey.shade500)),
+    ]),
+  );
+
+  Widget _lungTile() => Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(color: const Color(0xFFF8FFF8), borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE0F0E0))),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('Lung x-ray', style: TextStyle(fontSize: 11, color: Colors.grey.shade600, fontWeight: FontWeight.w600)),
+      const SizedBox(height: 8),
+      Container(
+        height: 70,
+        decoration: BoxDecoration(color: const Color(0xFF1A3A1A), borderRadius: BorderRadius.circular(10)),
+        child: const Center(child: Icon(Icons.air_rounded, color: Color(0xFF4CAF50), size: 36)),
+      ),
+      const SizedBox(height: 6),
+      Text('Latest scan', style: TextStyle(fontSize: 10, color: Colors.grey.shade500)),
+    ]),
+  );
+
+  Widget _folder(String title, IconData icon, {bool expanded = false}) => Container(
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)]),
+    child: Column(children: [
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(children: [
+          Container(
+            width: 36, height: 36,
+            decoration: BoxDecoration(color: const Color(0xFF4CAF50).withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+            child: Icon(icon, color: const Color(0xFF4CAF50), size: 20),
+          ),
+          const SizedBox(width: 12),
+          Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+          const Spacer(),
+          Icon(expanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded, color: Colors.grey.shade400),
+        ]),
+      ),
+      if (expanded)
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+          child: Column(children: [
+            _medItem('Aspirine', Colors.orange),
+            _medItem('Diclofenac', Colors.blue),
+          ]),
+        ),
+    ]),
+  );
+
+  Widget _medItem(String name, Color color) => Padding(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: Row(children: [
+      Container(
+        width: 32, height: 32,
+        decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+        child: Icon(Icons.medication_liquid_rounded, color: color, size: 18),
+      ),
+      const SizedBox(width: 10),
+      Text(name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+      const Spacer(),
+      Text('Daily', style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+    ]),
+  );
+
+  Widget _vital(String title, String value, String unit, IconData icon, Color color) => Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)]),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Row(children: [Icon(icon, color: color, size: 18), const Spacer(), Text(unit, style: TextStyle(fontSize: 11, color: Colors.grey.shade400))]),
+      const SizedBox(height: 8),
+      Text(value, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: color)),
+      Text(title, style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+    ]),
+  );
+}
+
+class _MiniChartPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p = Paint()..color = const Color(0xFF4CAF50)..strokeWidth = 2..style = PaintingStyle.stroke..strokeCap = StrokeCap.round;
+    final pts = [
+      Offset(0, size.height * .7), Offset(size.width * .2, size.height * .4),
+      Offset(size.width * .4, size.height * .6), Offset(size.width * .6, size.height * .2),
+      Offset(size.width * .8, size.height * .5), Offset(size.width, size.height * .3),
+    ];
+    final path = Path()..moveTo(pts[0].dx, pts[0].dy);
+    for (int i = 1; i < pts.length; i++) path.lineTo(pts[i].dx, pts[i].dy);
+    canvas.drawPath(path, p);
+  }
+  @override bool shouldRepaint(covariant CustomPainter _) => false;
+}
+
+// ─────────────────────────────────────────────
+// SCREEN 5 : CATEGORIES
+// ─────────────────────────────────────────────
+class CategoryScreen extends StatefulWidget {
+  const CategoryScreen({super.key});
+  @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
+  final Set<String> _selected = {'Pediatric', 'Aging'};
+
+  final List<Map<String, dynamic>> _cats = [
+    {'label': 'Clinic Trials', 'color': Color(0xFF4CAF50)},
+    {'label': 'Pediatric', 'color': Color(0xFF388E3C)},
+    {'label': 'Gastro', 'color': Color(0xFF81C784)},
+    {'label': 'Nutrition', 'color': Color(0xFF66BB6A)},
+    {'label': 'Heart', 'color': Color(0xFFE53935)},
+    {'label': 'Depression', 'color': Color(0xFF7E57C2)},
+    {'label': 'Pediatrics', 'color': Color(0xFF26A69A)},
+    {'label': "Women's Health", 'color': Color(0xFFEC407A)},
+    {'label': 'Aging', 'color': Color(0xFF1A1A2E)},
+    {'label': 'Newborn', 'color': Color(0xFF29B6F6)},
+    {'label': 'Fitness', 'color': Color(0xFFFFA726)},
+    {'label': 'Global Health', 'color': Color(0xFF78909C)},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF0F7F0),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text('Medical Categories', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+            const SizedBox(height: 6),
+            Text('Select your areas of interest', style: TextStyle(fontSize: 14, color: Colors.grey.shade500)),
+            const SizedBox(height: 24),
+
+            // Search bar
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+              child: Row(children: [
+                Icon(Icons.search_rounded, color: Colors.grey.shade400, size: 20),
+                const SizedBox(width: 10),
+                Text('Search categories...', style: TextStyle(color: Colors.grey.shade400, fontSize: 14)),
+              ]),
+            ),
+            const SizedBox(height: 24),
+
+            const Text('All categories', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E))),
+            const SizedBox(height: 14),
+
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(children: [
+                  Wrap(
+                    spacing: 10, runSpacing: 10,
+                    children: _cats.map((cat) {
+                      final label = cat['label'] as String;
+                      final color = cat['color'] as Color;
+                      final sel = _selected.contains(label);
+                      return GestureDetector(
+                        onTap: () => setState(() => sel ? _selected.remove(label) : _selected.add(label)),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: sel ? color : Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [BoxShadow(color: sel ? color.withOpacity(0.3) : Colors.black.withOpacity(0.06), blurRadius: sel ? 12 : 8, offset: const Offset(0, 2))],
+                          ),
+                          child: Text(label, style: TextStyle(color: sel ? Colors.white : Colors.grey.shade700, fontSize: 13, fontWeight: FontWeight.w600)),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 24),
+                  if (_selected.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Text('Selected (${_selected.length})', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E))),
+                        const SizedBox(height: 10),
+                        Wrap(
+                          spacing: 6, runSpacing: 6,
+                          children: _selected.map((s) => Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(color: const Color(0xFF4CAF50).withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+                            child: Text(s, style: const TextStyle(fontSize: 12, color: Color(0xFF4CAF50), fontWeight: FontWeight.w600)),
+                          )).toList(),
+                        ),
+                      ]),
+                    ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4CAF50), foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        elevation: 4, shadowColor: const Color(0xFF4CAF50).withOpacity(0.4),
+                      ),
+                      child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        Text('Next', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                        SizedBox(width: 8),
+                        Icon(Icons.arrow_forward_rounded, size: 20),
+                      ]),
+                    ),
+                  ),
+                ]),
+              ),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// SHARED HELPERS
+// ─────────────────────────────────────────────
+Widget _backButton() => Container(
+  width: 40, height: 40,
+  decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 8)]),
+  child: const Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: Color(0xFF1A1A2E)),
+);
